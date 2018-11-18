@@ -1,0 +1,11 @@
+# Magento default files
+dev/
+downloader/
+errors/
+includes/
+media/
+shell/
+var/
+favicon.ico
+# IDE files
+.idea/
