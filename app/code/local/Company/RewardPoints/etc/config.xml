@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Company_RewardPoints>
+            <version>0.1.0</version>
+        </Company_RewardPoints>
+    </modules>
+
+    <global>
+        <models>
+            <rewardpoints>
+                <class>Company_RewardPoints_Model</class>
+            </rewardpoints>
+        </models>
+
+
+        <resources>
+            <rewardpoints_setup>
+                <setup>
+                    <module>Company_RewardPoints</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+            </rewardpoints_setup>
+            <rewardpoints_write>
+                <connection><use>core_write</use></connection>
+            </rewardpoints_write>
+            <rewardpoints_read>
+                <connection><use>core_read</use></connection>
+            </rewardpoints_read>
+        </resources>
+    </global>
+
+
+    <frontend>
+        <events>
+            <sales_order_place_after>
+                <observers>
+                    <recordOrderPoints>
+                        <type>singleton</type>
+                        <class>rewardpoints/observer</class>
+                        <method>recordPointsForOrderEvent</method>
+                    </recordOrderPoints>
+
+                    <recordPoints>
+                        <type>singleton</type>
+                        <class>rewardpoints/observer</class>
+                        <method>recordPoints</method>
+                    </recordPoints>
+                </observers>
+            </sales_order_place_after>
+        </events>
+    </frontend>
+
+</config>
