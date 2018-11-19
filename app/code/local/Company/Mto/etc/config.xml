@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Company_Mto>
+            <version>0.1.0</version>
+        </Company_Mto>
+    </modules>
+
+    <global>
+        <blocks>
+            <mto>
+                <class>Company_Mto_Block</class>
+            </mto>
+        </blocks>
+
+        <models>
+            <mto>
+                <class>Company_Mto_Model</class>
+                <resourceModel>company_mto_resource</resourceModel>
+            </mto>
+        </models>
+
+        <helpers>
+            <mto>
+                <class>Company_Mto_Helper</class>
+            </mto>
+        </helpers>
+
+
+        <resources>
+            <mto_setup>
+                <setup>
+                    <module>Company_Mto</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+            </mto_setup>
+            <mto_write>
+                <connection><use>core_write</use></connection>
+            </mto_write>
+            <mto_read>
+                <connection><use>core_read</use></connection>
+            </mto_read>
+        </resources>
+
+
+        <!--Rewrite block-->
+        <blocks>
+            <catalog>
+                <rewrite>
+                    <product_view>Company_Mto_Block_Product_View</product_view>
+                </rewrite>
+            </catalog>
+        </blocks>
+    </global>
+
+
+    <frontend>
+        <events>
+            <sales_quote_save_before>
+                <observers>
+                    <my_cart_checker>
+                        <type>singleton</type>
+                        <class>Company_Mto_Helper_Event</class>
+                        <method>cartBeforeSave</method>
+                    </my_cart_checker>
+                </observers>
+            </sales_quote_save_before>
+        </events>
+    </frontend>
+</config>

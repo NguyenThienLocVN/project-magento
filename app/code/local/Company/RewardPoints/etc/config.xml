@@ -10,7 +10,17 @@
         <models>
             <rewardpoints>
                 <class>Company_RewardPoints_Model</class>
+                <resourceModel>company_rewardpoints_resource</resourceModel>
             </rewardpoints>
+
+            <company_rewardpoints_resource>
+                <class>Company_RewardPoints_Model_Resource</class>
+                <entities>
+                    <rewardpoints>
+                        <table>rewardpoints_account</table>
+                    </rewardpoints>
+                </entities>
+            </company_rewardpoints_resource>
         </models>
 
 
