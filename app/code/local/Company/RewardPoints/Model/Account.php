@@ -1,43 +1,53 @@
 <?php
 class Company_RewardPoints_Model_Account extends Mage_Core_Model_Abstract {
-    protected    $customerId = -1;
-    protected    $storeId = -1;
-    protected    $pointsCurrent = NULL;
-    protected    $pointsReceived = NULL;
-    protected    $pointsSpent = NULL;
+    public    $customerId = null;
+    public    $storeId = null;
+    public    $pointsCurrent = NULL;
+    public    $pointsReceived = NULL;
+    public    $pointsSpent = NULL;
+    public    $couponCode = NULL;
 
 
-
-    protected function _construct()
+    public function _construct()
     {
         $this->_init('rewardpoints/account');
     }
 
-
-
    //public setters and getters for every attribute
-    public function getRewardPoints()
+    public function setPointsCurrent($data)
     {
-        $rewardPoints = $this->getResource()->getAttribute('reward_points');
-        return $rewardPoints;
+        $this->pointsCurrent = (int)$data;
     }
+    public function setPointsReceived($data)
+    {
+        $this->pointsReceived = (int)$data;
+    }
+    public function setPointsSpent($data)
+    {
+        $this->pointsSpent = (int)$data;
+    }
+
     public function getPointsCurrent()
     {
-        $point = Mage::getModel('rewardpoints/account');
-        return $point->getPointCurrent();
+        return (int)$this->pointsCurrent;
     }
     public function getPointsReceived()
     {
-        $point = Mage::getModel('rewardpoints/account');
-        return $point->getPointReceived();
+        return (int)$this->pointsReceived;
     }
     public function getPointsSpent()
     {
-        $point = Mage::getModel('rewardpoints/account');
-        return $point->getPointsSpent();
+        return (int)$this->pointsSpent;
     }
-    //save and load methods
+
+
+
+
     public function save() {
+
+        $this->customerId = Mage::getModel('customer/session')->getCustomerId();
+        $this->storeId = Mage::app()->getStore()->getStoreId();
+
         $connection = Mage::getSingleton('core/resource')->getConnection('rewardpoints_write');
         $connection->beginTransaction();
         $fields = array();
@@ -45,7 +55,8 @@ class Company_RewardPoints_Model_Account extends Mage_Core_Model_Abstract {
         $fields['store_id'] = $this->storeId;
         $fields['points_current'] = $this->pointsCurrent;
         $fields['points_received'] = $this->pointsReceived;
-        $fields['points_spent'] = $this->pointsSpent;
+        $fields['points_spent'] = $this->pointsReceived - $this->pointsCurrent;
+
         try {
             $this->_beforeSave();
             if (!is_null($this->rewardpointsAccountId)) {
@@ -63,19 +74,24 @@ class Company_RewardPoints_Model_Account extends Mage_Core_Model_Abstract {
             throw $e;
         }
         return $this;
+
+
     }
-    public function load($id, $field=null) {
-        if ($field === null) {
+    public function load($id, $field = null) {
+        if ($field == null) {
             $field = 'customer_id';
         }
         $connection = Mage::getSingleton('core/resource')->getConnection('rewardpoints_read');
+
         $select = $connection->select()
             ->from('rewardpoints_account')
             ->where('rewardpoints_account.'.$field.'=?', $id);
         $data = $connection->fetchRow($select);
+
         if (!$data) {
             return $this;
         }
+
         $this->setRewardpointsAccountId($data['rewardpoints_account_id']);
         $this->setCustomerId($data['customer_id']);
         $this->setStoreId($data['store_id']);
@@ -85,13 +101,12 @@ class Company_RewardPoints_Model_Account extends Mage_Core_Model_Abstract {
         $this->_afterLoad();
         return $this;
     }
-    //add and subtract points methods
     public function addPoints($p) {
-        $this->pointsCurrent += $p;
-        $this->pointsReceived += $p;
+        (int)$this->pointsCurrent += $p;
+        (int)$this->pointsReceived += $p;
     }
     public function subtractPoints($p) {
-        $this->pointsCurrent -= $p;
-        $this->pointsSpent -= $p;
+        (int) $this->pointsCurrent -= $p;
+        (int)$this->pointsSpent -= $p;
     }
 }

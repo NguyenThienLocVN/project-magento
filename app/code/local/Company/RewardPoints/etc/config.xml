@@ -13,6 +13,7 @@
                 <resourceModel>company_rewardpoints_resource</resourceModel>
             </rewardpoints>
 
+            <!--Resource table-->
             <company_rewardpoints_resource>
                 <class>Company_RewardPoints_Model_Resource</class>
                 <entities>
@@ -21,6 +22,15 @@
                     </rewardpoints>
                 </entities>
             </company_rewardpoints_resource>
+
+
+            <!--Rewrite model Rule & Validator-->
+            <salesrule>
+                <rewrite>
+                    <rule>Company_RewardPoints_Model_Rule</rule>
+                    <validator>Company_RewardPoints_Model_Validator</validator>
+                </rewrite>
+            </salesrule>
         </models>
 
 
@@ -43,6 +53,7 @@
 
     <frontend>
         <events>
+            <!--Event record point after order-->
             <sales_order_place_after>
                 <observers>
                     <recordOrderPoints>
@@ -56,6 +67,12 @@
                         <class>rewardpoints/observer</class>
                         <method>recordPoints</method>
                     </recordPoints>
+
+                    <couponPoints>
+                        <type>singleton</type>
+                        <class>rewardpoints/observer</class>
+                        <method>useCouponPoints</method>
+                    </couponPoints>
                 </observers>
             </sales_order_place_after>
         </events>

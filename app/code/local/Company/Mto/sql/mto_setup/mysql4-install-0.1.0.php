@@ -1,5 +1,5 @@
 <?php
-
+die('OK');
 $read = Mage::getSingleton('core/resource')->getConnection('core_read');
 
 $eid = $read->fetchRow('select entity_type_id from eav_entity_type where entity_type_code="quote_item"');
@@ -11,6 +11,7 @@ $order_type_id = $eid['entity_type_id'];
 
 $installer = $this;
 $installer->startSetup();
+
 
 $c = array (
     'entity_type_id'=>$quote_type_id,

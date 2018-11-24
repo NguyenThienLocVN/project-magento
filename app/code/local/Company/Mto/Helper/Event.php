@@ -22,4 +22,11 @@ class Company_Mto_Helper_Event extends Mage_Core_Helper_Abstract
             }
         }
     }
+
+    static function attachSpecialOrderAttribs($observer) {
+        $event = $observer->getEvent();
+        $orderItem = $event->getOrderItem();
+        $quoteItem = $event->getItem();
+        $orderItem->setMtoLength( $quoteItem->getMtoLength() );
+    }
 }
